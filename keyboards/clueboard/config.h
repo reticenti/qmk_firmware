@@ -18,6 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define LEADER_TIMEOUT 300
+
 #include "config_common.h"
 
 /* USB Device descriptor parameter */
