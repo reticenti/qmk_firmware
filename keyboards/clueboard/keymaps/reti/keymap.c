@@ -1,8 +1,10 @@
 #include "clueboard.h"
+#include <stdarg.h>
 
 // Helpful defines
 #define GRAVE_MODS  (MOD_BIT(KC_LSHIFT)|MOD_BIT(KC_RSHIFT)|MOD_BIT(KC_LGUI)|MOD_BIT(KC_RGUI)|MOD_BIT(KC_LALT)|MOD_BIT(KC_RALT))
 #define _______ KC_TRNS
+
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
@@ -12,44 +14,113 @@
 #define _FL 1
 #define _CL 2
 #define _ML 3
+#define _KL 4
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* Keymap _BL: Base Layer (Default Layer)
    */
 [_BL] = KEYMAP(
-  F(0),    KC_1,      KC_2,    KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,   KC_9,    KC_0,     KC_MINS,  KC_EQL,    KC_GRV,  KC_BSPC,          KC_PGUP, \
-  KC_TAB,  KC_Q,      KC_W,    KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,   KC_O,    KC_P,     KC_LBRC,  KC_RBRC,   KC_BSLS,                   KC_PGDN, \
-  KC_CAPS, KC_A,      KC_S,    KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,   KC_L,    KC_SCLN,  KC_QUOT,  KC_NUHS,   KC_ENT,                             \
-  MO(_FL), KC_LSHIFT, KC_Z,    KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,   KC_SLSH,  KC_RSHIFT, MO(_ML),              KC_UP,            \
-  KC_LCTL, KC_LEAD,   KC_LGUI, KC_LALT,          KC_SPC,KC_SPC,                         KC_RALT,  KC_RGUI,  MO(_CL),   KC_RCTRL	, KC_LEFT, KC_DOWN, KC_RGHT),
+  F(0),    KC_1,      KC_2,    KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,   KC_9,    KC_0,     KC_MINS,  KC_EQL,    KC_GRV,  KC_BSPC,          KC_PGUP,         \
+  KC_TAB,  KC_Q,      KC_W,    KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,   KC_O,    KC_P,     KC_LBRC,  KC_RBRC,   KC_BSLS,                   KC_PGDN,         \
+  KC_CAPS, KC_A,      KC_S,    KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,   KC_L,    KC_SCLN,  KC_QUOT,  KC_NUHS,   KC_ENT,                                     \
+  MO(_FL), KC_LSHIFT, KC_Z,    KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM, KC_DOT,   KC_SLSH,  KC_RSHIFT, OSL(_ML),                   KC_UP,          \
+  KC_LCTL, KC_LEAD,   KC_LGUI, KC_LALT,          KC_SPC,KC_SPC,                         KC_RALT,  KC_RGUI,  OSL(_KL),  KC_RCTRL	,        KC_LEFT, KC_DOWN, KC_RGHT),
 
   /* Keymap _FL: Function Layer
    */
 [_FL] = KEYMAP(
-  KC_GRV,  KC_F1,   KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,  KC_F7,  KC_F8,  KC_F9,   KC_F10,   KC_F11,   KC_F12,   _______, KC_DEL,           BL_STEP, \
-  _______, _______, _______,_______,_______,_______,_______,_______,KC_PSCR,KC_SLCK, KC_PAUS,  _______,  _______,  _______,                   _______, \
-  _______, _______, MO(_CL),_______,_______,_______,_______,_______,_______,_______, _______,  _______,  _______,  _______,                           \
-  _______, _______, _______,_______,_______,_______,_______,_______,_______,_______, _______,  _______,  _______,  _______,          KC_PGUP,         \
-  _______, _______, _______, _______,       _______,_______,                        _______,  _______,  _______,  MO(_FL), KC_HOME, KC_PGDN, KC_END),
+  KC_GRV,  KC_F1,   KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,  KC_F7,  KC_F8,  KC_F9,   KC_F10 ,  KC_F11 ,  KC_F12 ,  _______, KC_DEL,              BL_STEP,        \
+  _______, _______, _______,_______,_______,_______,_______,_______,KC_PSCR,KC_SLCK, KC_PAUS,  _______,  _______,  _______,                      _______,        \
+  _______, _______, MO(_CL),_______,_______,_______,_______,_______,_______,_______, _______,  _______,  _______,  _______,                                      \
+  MO(_FL), _______, _______,_______,_______,_______,_______,_______,_______,_______, _______,  _______,  _______,  _______,                      KC_PGUP,        \
+  _______, _______, _______, _______,       _______,_______,                         _______,  _______,  _______,  _______,            KC_HOME,  KC_PGDN, KC_END),
 
   /* Keymap _CL: Control layer
    */
 [_CL] = KEYMAP(
-  _______, _______, _______,_______,_______,_______,_______,_______,_______,_______, _______,  _______,  _______,  _______, RGB_TOG,             RGB_VAI, \
-  _______, _______, _______,_______,RESET,  _______,_______,_______,_______,_______, _______,  _______,  _______,  _______,                      RGB_VAD, \
-  _______, _______, MO(_CL),_______,_______,_______,_______,_______,_______,_______, _______,  _______,  _______,  _______,                               \
-  MO(_FL), _______, _______,_______,_______,_______,_______,MAGIC_TOGGLE_NKRO,_______,_______, _______,  _______,  _______,  MO(_ML),             RGB_SAI,          \
-  _______, _______, _______,_______,        RGB_MOD,   RGB_MOD,                                _______,  _______,  _______,  _______, RGB_HUD,    RGB_SAD,    RGB_HUI),
+  _______, _______, _______,_______,_______,_______,_______,_______,_______,  _______, _______,  _______,  _______,  _______,  RGB_TOG,              RGB_VAI,           \
+  _______, _______, _______,_______,RESET,  _______,_______,_______,_______,  _______, _______,  _______,  _______,  _______,                        RGB_VAD,           \
+  _______, _______, MO(_CL),_______,_______,_______,_______,_______,_______,  _______, _______,  _______,  _______,  _______,                                           \
+  MO(_FL), _______, _______,_______,_______,_______,_______,MAGIC_TOGGLE_NKRO,_______, _______,  _______,  _______,  _______,  OSL(_ML),             RGB_SAI,           \
+  _______, _______, _______,_______,        RGB_MOD,   RGB_MOD,                                  _______,  _______,  _______,  _______, RGB_HUD,     RGB_SAD,    RGB_HUI), 
 
   /* Keymap _ML: Media layer
    */
 [_ML] = KEYMAP(
-  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,  _______,  _______, KC_MUTE,                KC_VOLU, \
-  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,  _______,  _______,                         KC_VOLD, \
-  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,  _______,  _______,                                  \
-  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,  _______,  _______,             KC_MPLY,             \
-  _______, _______, _______,_______,        _______,   _______,                       _______,  _______,  _______,  _______, KC_MPRV,    KC_MSTP,    KC_MNXT),
+  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,  _______,   _______ ,  KC_MUTE,    KC_VOLU,        \
+  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,  _______,   _______ ,              KC_VOLD,        \
+  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,  _______,   _______ ,                              \
+  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,  _______,   OSL(_ML),              KC_MPLY,        \
+  _______, _______, _______,_______,        _______,   _______,                       _______,  _______,  _______,   _______ ,  KC_MPRV,    KC_MSTP,KC_MNXT),
+  
+  /* K Layer
+	This area has access to functions that  setup in advanced. Hopefullly this area will also be represented by the leader key command functions.
+  */
+  [_KL] = KEYMAP(
+  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,   _______,  _______, _______,             _______,        \
+  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,   _______,  _______,                      _______,        \
+  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,   _______,  _______,                                      \
+  _______, _______, _______,_______,_______, _______,_______,MAGIC_HOST_NKRO,_______, _______,  _______,   _______,  _______, _______,             _______,        \
+  _______, _______, MAGIC_NO_GUI,_______,        _______,   _______,                  _______,  MAGIC_UNNO_GUI,     OSL(_KL), _______, _______,    _______,_______),
+  
+  
 };
+
+
+#define TAP_ONCE(code)  \
+  register_code (code); \
+  unregister_code (code)
+
+/*Leader Key Mappings 
+*/
+LEADER_EXTERNS();
+void matrix_scan_user(void) {
+  LEADER_DICTIONARY() {
+    leading = false;
+    leader_end();
+
+	//send username
+    SEQ_ONE_KEY(KC_R) {
+      SEND_STRING("reti");
+    }
+	
+	//open app choser
+	SEQ_ONE_KEY(KC_LGUI) { 
+      register_code(KC_LCTRL); 
+	  register_code(KC_LALT);
+	  register_code(KC_TAB);
+      unregister_code(KC_LCTRL); 
+	  unregister_code(KC_LALT);
+	  unregister_code(KC_TAB);
+    }
+	
+	// vim style delete line
+    SEQ_TWO_KEYS(KC_D, KC_L) {
+      TAP_ONCE(KC_HOME);
+      register_code(KC_LSHIFT);
+	  TAP_ONCE(KC_END);
+	  unregister_code(KC_LSHIFT);
+	  TAP_ONCE(KC_DEL);
+    }
+	
+	// vim style delete word
+    SEQ_TWO_KEYS(KC_D, KC_W) {
+      register_code(KC_LCTRL);
+	  register_code(KC_LSHIFT);
+	  TAP_ONCE(KC_RIGHT);
+	  unregister_code(KC_LSHIFT);
+	  unregister_code(KC_LCTRL);
+	  TAP_ONCE(KC_DEL);
+    }
+	
+    SEQ_THREE_KEYS(KC_A, KC_S, KC_D) {
+      register_code(KC_LGUI);
+      register_code(KC_S);
+      unregister_code(KC_S);
+      unregister_code(KC_LGUI);
+    }
+  }
+}
 
 /* This is a list of user defined functions. F(N) corresponds to item N
    of this list.
@@ -94,3 +165,16 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt) {
       break;
   }
 }
+
+/*
+Generic Keymap
+
+[FN] = KEYMAP(
+  _______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,  _______,        \
+  _______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,          _______,        \
+  _______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,                          \
+  _______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,          _______,        \
+  _______,_______,_______,_______,        _______,   _______,                     _______,_______,_______,_______,_______,  _______,_______),
+  
+  
+  */
