@@ -58,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   */
   [_KL] = KEYMAP(
   _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,   _______,  _______, _______,             _______,        \
-  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,   _______,  _______,                      _______,        \
+  _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,   F(2)   ,  F(1)   ,                      _______,        \
   _______, _______, _______,_______,_______, _______,_______,_______,_______,_______, _______,  _______,   _______,  _______,                                      \
   _______, _______, _______,_______,_______, _______,_______,MAGIC_HOST_NKRO,_______, _______,  _______,   _______,  _______, _______,             _______,        \
   _______, _______, MAGIC_NO_GUI,_______,        _______,   _______,                  _______,  MAGIC_UNNO_GUI,     OSL(_KL), _______, _______,    _______,_______),
@@ -128,6 +128,8 @@ void matrix_scan_user(void) {
  */
 const uint16_t PROGMEM fn_actions[] = {
   [0] = ACTION_FUNCTION(0),  // Calls action_function()
+  [1] = ACTION_FUNCTION(1),
+  [2] = ACTION_FUNCTION(2),
 };
 
 void action_function(keyrecord_t *record, uint8_t id, uint8_t opt) {
@@ -164,6 +166,28 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt) {
         }
       }
       break;
+	  
+	case 1:
+	  if (record->event.pressed) {
+	    TAP_ONCE(KC_1);
+	    TAP_ONCE(KC_4);
+	    TAP_ONCE(KC_7);
+	    TAP_ONCE(KC_8);
+	  }
+	  break;
+	  
+	case 2:
+	  if (record->event.pressed) {
+	    TAP_ONCE(KC_1);
+	    TAP_ONCE(KC_4);
+	    TAP_ONCE(KC_7);
+	    TAP_ONCE(KC_8);
+	    TAP_ONCE(KC_9);
+	    TAP_ONCE(KC_6);
+	    TAP_ONCE(KC_3);
+	    TAP_ONCE(KC_2);
+	  }
+	  break;
   }
 }
 
