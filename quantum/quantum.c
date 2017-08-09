@@ -193,12 +193,19 @@ bool process_record_quantum(keyrecord_t *record) {
     // }
 
   if (!(
+  #if defined(KEY_LOCK_ENABLE)
+    // Must run first to be able to mask key_up events.
+    process_key_lock(&keycode, record) &&
+  #endif
     process_record_kb(keycode, record) &&
   #if defined(MIDI_ENABLE) && defined(MIDI_ADVANCED)
     process_midi(keycode, record) &&
   #endif
   #ifdef AUDIO_ENABLE
     process_audio(keycode, record) &&
+  #endif
+  #ifdef STENO_ENABLE
+    process_steno(keycode, record) &&
   #endif
   #if defined(AUDIO_ENABLE) || (defined(MIDI_ENABLE) && defined(MIDI_BASIC))
     process_music(keycode, record) &&
@@ -722,14 +729,14 @@ void backlight_set(uint8_t level)
       //   _SFR_IO8((backlight_pin >> 4) + 2) &= ~_BV(backlight_pin & 0xF);
       // #endif
     #endif
-  } 
+  }
   #ifndef NO_BACKLIGHT_CLOCK
     else if ( level == BACKLIGHT_LEVELS ) {
       // Turn on PWM control of backlight pin
       TCCR1A |= _BV(COM1x1);
       // Set the brightness
       OCR1x = 0xFFFF;
-    } 
+    }
     else {
       // Turn on PWM control of backlight pin
       TCCR1A |= _BV(COM1x1);
@@ -747,7 +754,7 @@ uint8_t backlight_tick = 0;
 
 void backlight_task(void) {
   #ifdef NO_BACKLIGHT_CLOCK
-  if ((0xFFFF >> ((BACKLIGHT_LEVELS - backlight_config.level) * ((BACKLIGHT_LEVELS + 1) / 2))) & (1 << backlight_tick)) { 
+  if ((0xFFFF >> ((BACKLIGHT_LEVELS - backlight_config.level) * ((BACKLIGHT_LEVELS + 1) / 2))) & (1 << backlight_tick)) {
     #if BACKLIGHT_ON_STATE == 0
       // PORTx &= ~n
       _SFR_IO8((backlight_pin >> 4) + 2) &= ~_BV(backlight_pin & 0xF);
