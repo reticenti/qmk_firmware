@@ -60,6 +60,10 @@ extern uint32_t default_layer_state;
  	#include "process_audio.h"
 #endif
 
+#ifdef STENO_ENABLE
+	#include "process_steno.h"
+#endif
+
 #if defined(AUDIO_ENABLE) || (defined(MIDI_ENABLE) && defined(MIDI_BASIC))
 	#include "process_music.h"
 #endif
@@ -93,6 +97,10 @@ extern uint32_t default_layer_state;
 
 #ifdef COMBO_ENABLE
 	#include "process_combo.h"
+#endif
+
+#ifdef KEY_LOCK_ENABLE
+	#include "process_key_lock.h"
 #endif
 
 #define SEND_STRING(str) send_string(PSTR(str))
