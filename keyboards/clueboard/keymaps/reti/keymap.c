@@ -194,13 +194,15 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt) {
 	  }
 	  break;
 	  
-	case 3:
-	  if (record->event.pressed) {
-	    register_code(KC_LSHIFT);
-		register_code(KC_L);
-		unregister_code(KC_LSHIFT);
-		unregister_code(KC_L);
-	  }
+	case 3: // Shift-L for PoE movement Skill
+	  if (record->event.pressed){
+		register_code(KC_LSHIFT);	
+		while(record->event.pressed){
+			register_code(KC_L); 
+			unregister_code(KC_L);  
+		}
+		unregister_code(KC_LSHIFT);  
+	  }	  
 	  break;
   }
 }
