@@ -102,6 +102,9 @@ void matrix_scan_user(void) {
 	  unregister_code(KC_LSHIFT);
 	  TAP_ONCE(KC_DEL);
     }
+	  SEQ_TWO_KEYS(KC_H, KC_O){
+		  TAP_ONCE(KC_LENTER)
+	  }
 	
 	// vim style delete word
     SEQ_TWO_KEYS(KC_D, KC_W) {
